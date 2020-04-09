@@ -3,21 +3,14 @@ local function validate_scope(allowed_scopes, jwt_claims)
         return true
     end
 
-    if jwt_claims == nil or jwt_claims.authorization == nil then
-        return nil, "Missing required authorization claim"
+    if jwt_claims == nil or jwt_claims.given_name == nil then
+        return nil, "Missing required scope claim"
     end
 
-    kong.log.debug('jwt_claims: ' .. jwt_claims)
-    kong.log.debug('jwt_claims.authorization: ' .. jwt_claims.authorization)
-    
     for _, curr_scope in pairs(allowed_scopes) do
-        for _, permission in pairs(jwt_claims.authorization.permissions) do
-            for _, scope in pairs(permission.scopes) do
-                if curr_scope == scope then
-                    return true
-                end
-            end
-        end    
+        if string.find(jwt_claims.given_name, curr_scope) then
+            return true
+        end
     end
     return nil, "Missing required scope"
 end
