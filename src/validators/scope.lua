@@ -9,7 +9,7 @@ local function validate_scope(allowed_scopes, jwt_claims)
 
     for _, curr_scope in pairs(allowed_scopes) do
         for _, permission in pairs(jwt_claims.authorization.permissions) do
-            for _, scope in pairs(jwt_claims.authorization.permissions.scopes) do
+            for _, scope in pairs(permission.scopes) do
                 if curr_scope == scope then
                     return true
                 end
